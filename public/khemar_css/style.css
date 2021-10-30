@@ -1,0 +1,172 @@
+    /*
+Project name:khamr
+Date:1/6/2021
+Created By:mohamed alserhi
+Created with: html/css
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
+
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    font-family: 'Cairo', sans-serif;
+
+}
+
+body {
+    background-color: rgb(241, 241, 241);
+}
+
+.cardkehmar {
+    position: relative;
+    width: 100%;
+    margin: auto;
+    padding-bottom: 0;
+}
+
+/* Start cardkehmar-circle*/
+.cardkehmar .cardkehmar-circle {
+    width: 200px;
+    height: 200px;
+    position: relative;
+    top: 100px;
+    margin: auto;
+    border-radius: 50%;
+    border: 15px #991d5b solid;
+    z-index: 2;
+    background: #991d5b;
+}
+
+.cardkehmar .cardkehmar-circle img {
+    width: 100%;
+    height: 100%;
+    border-radius: 100%;
+}
+/* End cardkehmar-circle*/
+
+
+/* Start cardkehmar-body*/
+.cardkehmar .cardkehmar-body {
+    height: 400px;
+    width: 300px;
+    position: relative;
+    top: -30px;
+    background-image: linear-gradient(#991d5b, #2b2d6a);
+    border-radius: 40px;
+    margin: auto;
+    padding-top: 100px;
+    z-index: 1;
+}
+.cardkehmar .cardkehmar-body h2 {
+    font-size: 50px;
+    color: white;
+    text-align: center;
+    font-weight: 400;
+    margin-top: 40px;
+}
+
+.cardkehmar .cardkehmar-body p {
+    font-size: 27px;
+    color: white;
+    text-align: center;
+    font-weight: 700;
+}
+
+.cardkehmar .cardkehmar-body .star {
+    text-align: center;
+}
+
+.cardkehmar .cardkehmar-body .star img {
+    width: 120px;
+}
+
+.cardkehmar .cardkehmar-body ul {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.cardkehmar .cardkehmar-body ul li {
+    position: relative;
+  
+    background-color: white;
+    border-radius: 10px;
+    float: left;
+    width: 40;
+    height:  40;
+    list-style: none;
+    margin: 5px;
+    cursor: pointer;
+}
+
+.cardkehmar .cardkehmar-body ul li i {
+    position: absolute;
+    top: 7px;
+    right: 8px;
+    width: 46px;
+    height: 43px;
+}
+
+.cardkehmar .cardkehmar-body ul li:hover {
+    background-color: #dadada;
+}
+
+.cardkehmar .cardkehmar-body .btns {
+    clear: both;
+    width: 186px;
+    margin: 10px auto;
+    margin-top: 25px;
+    display: flex;
+}
+
+.cardkehmar .cardkehmar-body .btns .cover {
+    width: 85px;
+    height: 65px;
+    display: inline-block;
+    background-color: white;
+    border-radius: 5px;
+    padding: 7px;
+    box-shadow: 1px 9px 8px #817c7c;
+    margin: 3px;
+}
+
+
+.cardkehmar .cardkehmar-body .btns button {
+    width: 70px;
+    height: 50px;
+    font-weight: 700;
+    border-radius: 5px;
+    outline: none;
+    color: white;
+    border: none;
+    font-size: 20px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.btns .stor button {
+    background-color: #2b2d6a;
+}
+.btns .stor button a {
+    /* background-color: #2b2d6a; */
+    color: white;
+}
+
+.btns .go button {
+    background-color: #cc2c2b;
+}
+.btns .go button a {
+    color: white;
+}
+
+.cardkehmar .cardkehmar-body .go button:hover {
+    background-color: #7c0101;
+}
+
+.cardkehmar .cardkehmar-body .stor button:hover {
+    background-color: #0c0e42;
+}
+
+/* End cardkehmar-body*/

@@ -1,0 +1,190 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.card-flip{
+   perspective: 996px;
+    height: 170px;
+    border: none;
+    width: 90%;
+    margin-top: 50px;
+
+}
+
+
+.card-flip .inner{
+    background-image: linear-gradient(to top,rgb(74 113 138) ,rgb(0 255 185) );
+    color: white;
+    margin: 15px;
+    border-radius: 6.5%;
+    border-top-left-radius: 25%;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.9s;
+    transform-style: preserve-3d;
+    padding: 50px;
+}
+
+
+.card-flip:hover .inner{
+    transform: rotateY(180deg);
+
+}
+.card-body .front span img {
+   width: 45px;
+    height: 45px;
+    margin-top: 22px;
+}
+
+.card-flip .card-body{
+    box-shadow: 3px 1px 4px black;
+}
+
+.card-flip .card-body .front{
+    position: absolute;
+    width: 80%;
+    height: 60%;
+    top: 0;
+    left: 0;
+    
+   -webkit-backface-visibility:hidden;
+-moz-backface-visibility: hidden;
+-ms-backface-visibility: hidden;
+-o-backface-visibility: hidden;
+ backface-visibility:hidden;
+ transform: rotateX(0deg)
+}
+
+
+.card-flip .card-body .front{
+    margin:0 40px;
+}
+
+
+
+.card-body .back{
+    position: absolute;
+    width: 80%;
+    height: 60%;
+    top: 0;
+    left: 0;
+  -webkit-backface-visibility:hidden;
+-moz-backface-visibility: hidden;
+-ms-backface-visibility: hidden;
+-o-backface-visibility: hidden;
+ backface-visibility:hidden;
+    margin:50px;
+    transform: rotateX(0deg)
+
+
+}
+
+
+.card-body ul {
+    margin-bottom: 22px;
+
+}
+
+.card-body ul li{
+    list-style: none;
+    display: inline-block;
+
+}
+
+.card-body ul li .fa-star{
+    color: gold;
+}
+
+.card-body .back h2{
+    font-size: 26px;
+    margin-bottom: 10px;
+    margin-right: -22px;
+}
+
+.card-body .back p{
+    font-weight: 700;
+    margin-right: -16px;
+    margin-top: 10px;
+}
+
+.card-body .back input{
+    width: 80px;
+    height: 40px;
+    border: none;
+    outline: none;
+        margin-top: -40px;
+    background-color: rgb(179, 50, 50);
+    border-bottom-left-radius: 35%;
+    border-top-right-radius: 35%;
+    box-shadow: 5px 4px 8px black;
+    margin-left: 0;
+    
+}
+
+.card-body .back input:hover{
+    background-color: rgb(255, 116, 116);
+
+}
+
+
+
+
+
+
+.card-flip .card-body .back{
+    transform: rotateY(180deg);
+}
+
+
+
+
+.card-body .front .fa-badge-check{
+    font-size: 40px;
+    margin-left: 10px;
+    margin-top: 40px;
+}
+
+.card-body .front .img-cover{
+    width: 140px;
+    height: 140px;
+    border: 2px solid #3cf2c5;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-top: -36px;
+    background-color: #a0999d  ;
+}
+
+.card-body .front img{
+    width: 100%;
+    height: 100%;
+
+}
+
+.card-body .front h2{
+margin-top: 90px;
+font-size: 22px;
+}
+
+.clearfix1{
+    display: inline-block;
+    clear: both;
+}
+
+
+
+@media(max-width: 575.98px){
+    .card-flip .inner{
+        width: 100%;
+    }
+    .card-body ul{
+margin-left:10px;
+}
+
+.card-body .back input{
+margin-left:10px;
+}
+}
+

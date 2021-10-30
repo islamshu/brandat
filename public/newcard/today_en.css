@@ -1,0 +1,214 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
+.aside{
+    width: 265px;
+    height: 487px;
+    margin: 50px auto;
+    background-color: #991d5b26 !important;
+}
+.rowone{
+    overflow: scroll;
+    height: 403px;
+    overflow-x: hidden; 
+    direction:rtl;
+}
+.card4{
+    border: none;
+    border-radius: 0;
+    width: 100%;
+    background-color: transparent;
+}
+
+.card4-bodyyr {
+    padding: 1.25rem 0 1.25rem 0;
+    width: 80%;
+
+}
+
+.card4-bodyyr  h4{
+margin:0 0 3px 0;
+color: #991d5b;
+font-size: 18px;
+direction:ltr;
+
+}
+
+.col-md-4,.col-md-8{
+    padding: 0;
+}
+
+.card4-bodyyr  .price{
+    margin: 7px 0 10px 0;
+}
+
+.card4-bodyyr  .price del{
+    font-size: 11px;
+    margin-right: 5px;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+
+.card4-bodyyr  .price span {
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.card4-bodyyr  a{
+    text-decoration: none;
+    border-radius: 5%;
+    padding: 2px 4px 2px 4px;
+    margin-top: 4px;
+    font-size: 14px;
+
+}
+
+
+.card4 img {
+    margin-top: 17px;
+    position: absolute;
+    right: 0px;
+    width: 95%;
+    height: 90%;
+    border-radius: 5px;
+}
+
+.img-box{
+    position: relative;
+}
+
+/* .discount{
+    background-color: #f00;
+    color: white;
+    position: absolute;
+    top: 17px;
+    right: 23px;
+    z-index: 2;
+    font-size: 12px;
+    border-bottom-left-radius: 12px;
+
+} */
+
+@media (max-width: 575.98px) {
+       .rowone{
+    overflow: auto;
+    height: auto;
+        direction: ltr;
+
+} 
+    .card4{
+        width: 50%;
+    }    
+    .aside{
+        width: 98%;
+        height: 230px;
+        padding-top: 10px;
+        margin: 10px auto;
+    }
+
+    .card4-bodyyr  {
+        padding: 1.25rem 0 1.25rem 0;
+        width: 95%;
+        text-align: right!important;
+    margin-left: 0px;
+    }
+
+    .card4-bodyyr  h4 {
+
+        font-size: 11px;
+    }
+
+
+    .card4-bodyyr  .price del {
+        font-size: 8px;
+    }
+
+    .card4-bodyyr  .price span {
+        font-size: 10px;
+
+    }
+
+    .card4-bodyyr  a {
+        margin-top: 0px;
+        font-size: 10px;
+    }
+
+    .card4 img {
+    left: 11px !important;
+    top: -100px;
+    width: 64px;
+    height: 67px;
+    }
+
+    /* .discount{
+        right: 18px;
+        top: -86px;
+    }
+     */
+    
+}
+
+
+@media (min-width: 576px) and (max-width: 767.98px) {
+
+   .rowone{
+    overflow: auto;
+    height: auto;
+} 
+    .card4{
+        width: 50%;
+    }    
+    .aside{
+        width: 85%;
+        height: 235px;
+        padding-left: 5%;
+        padding-top: 10px;
+        
+    }
+
+    .card4-bodyyr  {
+        padding: 1.25rem 0 1.25rem 0;
+        width: 50%;
+    }
+
+    .card4-bodyyr  h4 {
+
+        font-size: 14px;
+    }
+
+
+    .card4-bodyyr  .price del{
+        font-size: 9px;
+    }
+
+    .card4-bodyyr  .price span {
+        font-size: 13px;
+
+    }
+
+    .card4-bodyyr  a {
+        margin-top: 0px;
+        font-size: 12px;
+    }
+
+    .card4 img {
+        right: 20px;
+        top: -125px;
+        width: 100px;
+        height: 100px;
+    }
+
+    /* .discount{
+        right: 20px;  
+        top: -109px;
+    } */
+
+    
+
+}
