@@ -19,7 +19,11 @@ class ClubPointController extends BaseController
     public function convert_point_into_wallet_id($club_id)
     {
         $club_point_convert_rate = BusinessSetting::where('type', 'club_point_convert_rate')->first()->value;
-        $club_point = ClubPoint::findOrFail($club_id);
+        $club_point = ClubPoint::find($club_id);
+        if(!$club_point){
+            return $this->sendErorr( translate('club point id not fount'));
+
+        }
         $wallet = new Wallet;
         $wallet->user_id = auth('api')->id();
         $wallet->amount = floatval($club_point->points / $club_point_convert_rate);
