@@ -376,6 +376,7 @@ class SellerController extends BaseController
 
     public function store_edit(Request $request)
     {
+        
         $id = auth('api')->user()->shop->id;
         $shop = Shop::find($id);
         if ($request->has('name') || $request->has('meta_title') || $request->has('meta_description') || $request->has('address')) {

@@ -67,7 +67,14 @@ class ShopController extends BaseController
                 array_push($seell, $item);
             }
         }
-        return $seell;
+        $ids=[];
+        foreach($seell as $s){
+           
+           array_push($ids,$s['id']);
+        }
+       
+        $shop= ShopResource::collection(Seller::whereIn('id',$ids)->get());
+        return $this->sendResponse($shop, translate('shops'));
     }
 
     public function index()
