@@ -35,6 +35,7 @@ use App\Card;
 use DB;
 use App\Vistore;
 use App\Language;
+use App\Models\V3\Upload;
 use Cache;
 use Response;
 class HomeController extends Controller
@@ -349,6 +350,12 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $uploads = Upload::get();
+        foreach($uploads as $up){
+            $up->user_id = 9;
+            $up->save();
+        }
+        dd('ddd');
 
     $bussnes=    BusinessSetting::get();
         $slider_images = json_decode(get_setting('home_slider_images'), true);
