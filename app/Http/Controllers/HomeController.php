@@ -350,12 +350,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $uploads = Upload::get();
-        foreach($uploads as $up){
-            $up->user_id = 9;
-            $up->save();
-        }
-        dd('ddd');
+        
 
     $bussnes=    BusinessSetting::get();
         $slider_images = json_decode(get_setting('home_slider_images'), true);

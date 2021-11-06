@@ -23,8 +23,8 @@ class ShopResource extends JsonResource
             'logo' => uploaded_asset_nullable($this->logo),
             'sliders' => $this->convertPhotos(explode(',', $this->sliders)),
             'address_id'=>$this->address,
-            'address_ar' => City2::find($this->address)->name,
-            'address_en' => City2::find($this->address)->name_en,
+            'address_ar' => @City2::find($this->address)->name,
+            'address_en' => @City2::find($this->address)->name_en,
 
             'facebook' => $this->facebook,
             'google' => $this->google,
