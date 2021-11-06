@@ -25,36 +25,19 @@ class CartController extends BaseController
 {
     public function get_count_cart()
     {
-        $admin_products = array();
-        $seller_products = array();
         if (auth('api')->check()) {
             $user = auth('api')->user();
-            $carts = $user->carts;
+            $cart_count = $user->carts()->count();
         } else {
             $coo = request()->cookie('cookes');
-            $carts = Cart::where('cokkeies', $coo)->get();
+            if($coo == null){
+                $cart_count = 0; 
+            }else{
+                $cart_count = Cart::where('cokkeies', $coo)->count();
+            }   
         }
-        if ($carts == null) {
+        if ($cart_count == null) {
             return $this->sendError('لا يوجد لديك سلة', 'لا يوجد لديك سلة');
-        }
-        foreach ($carts as $cart) {
-            if ($cart->product) {
-                if ($cart->product->added_by == 'admin') {
-                    array_push($admin_products, $cart['product_id']);
-                } else {
-                    $product_ids = array();
-                    if (array_key_exists(Product::find($cart['product_id'])->user_id, $seller_products)) {
-                        $product_ids = $seller_products[Product::find($cart['product_id'])->user_id];
-                    }
-                    array_push($product_ids, $cart['product_id']);
-                    $seller_products[$cart->product->user_id] = $product_ids;
-                }
-            }
-        }
-        if (!empty($admin_products)) {
-            $cart_count = count($admin_products);
-        }else{
-            $cart_count = count($seller_products);
         }
         return $this->sendResponse($cart_count, 'this is all carts item');
     }
@@ -63,16 +46,21 @@ class CartController extends BaseController
     {
         $admin_products = array();
         $seller_products = array();
-        $link = url('/') . '/api/v1';
+        $link = url('/') . '/api/v3';
         if (auth('api')->check()) {
             $user = auth('api')->user();
             $carts = $user->carts;
         } else {
             $coo = request()->cookie('cookes');
-            $carts = Cart::where('cokkeies', $coo)->get();
+            if($coo == null){
+                $carts=null;
+            }else{
+                $carts = Cart::where('cokkeies', $coo)->get();
+
+            }
         }
         if ($carts == null) {
-            return $this->sendError('فش عندك سلة يا توووووت', 'فش عندك سلة يا توووووت');
+            return $this->sendError('لا يوجد منتجات بالسلة', 'لا يوجد منتجات بالسلة');
         }
         foreach ($carts as $cart) {
             if ($cart->product) {
@@ -80,10 +68,11 @@ class CartController extends BaseController
                     array_push($admin_products, $cart['product_id']);
                 } else {
                     $product_ids = array();
+//                    if (array_key_exists(Product::withoutGlobalScope('user_active')->find($cart['product_id'])->user_id, $seller_products)) {
                     if (array_key_exists(Product::find($cart['product_id'])->user_id, $seller_products)) {
                         $product_ids = $seller_products[Product::find($cart['product_id'])->user_id];
                     }
-                    array_push($product_ids, $cart['product_id']);
+                    array_push($product_ids, $cart['id']);
                     $seller_products[$cart->product->user_id] = $product_ids;
                 }
             }
@@ -95,7 +84,8 @@ class CartController extends BaseController
             $tax = 0;
             $shipping = BusinessSetting::where('type', 'shipping_cost')->first()->value;
             foreach ($admin_products as $key => $cartItem) {
-                $product = Product::find($cartItem);
+//                $product = Product::withoutGlobalScope('user_active')->find($cartItem);
+                $product = Cart::find($cartItem)->product;
                 $flash_deal_discount = 0;
                 $flash_deal_products = FlashDealProduct::where('product_id',$product->id)->get();
                 if ($flash_deal_products) {
@@ -167,8 +157,11 @@ class CartController extends BaseController
             $subtotal = 0;
             $tax = 0;
             $shipping = BusinessSetting::where('type', 'shipping_cost')->first()->value;
+            $array_broduct['seller']['products'] = array();
             foreach ($cartItemqq as $k => $v) {
-                $product = Product::find($v);
+//                $product = Product::withoutGlobalScope('user_active')->find($v);
+                $cart = Cart::find($v);
+                $product = $cart->product;
                 $flash_deal_discount = 0;
                 $flash_deal_products = FlashDealProduct::where('product_id',$product->id)->get();
                 if ($flash_deal_products) {
@@ -187,18 +180,18 @@ class CartController extends BaseController
                 $pro = getPrice($product) - $flash_deal_discount;
                 if (auth('api')->check()) {
                     $id = auth('api')->id();
-                    $cart = Cart::where('user_id', $id)->where('product_id', $product->id)->first();
                     $subtotal += ($pro * $cart->quantity);
                     $tax += ($cart->tax * $cart->quantity);
                 } else {
                     $id = request()->cookie('cookes');
-                    $cart = Cart::where('cokkeies', $id)->where('product_id', $product->id)->first();
                     $subtotal += ($pro * $cart->quantity);
                     $tax += ($cart->tax * $cart->quantity);
                 }
                 $array_broduct['seller']['products'][$k]['product']['id'] = $product->id;
                 $array_broduct['seller']['products'][$k]['product']['name_ar'] = $product->name_ar;
                 $array_broduct['seller']['products'][$k]['product']['name_en'] = $product->name;
+                $array_broduct['seller']['products'][$k]['product']['min_qty'] = $product->min_qty;
+                $array_broduct['seller']['products'][$k]['product']['current_stock'] = $product->current_stock;
                 $array_broduct['seller']['products'][$k]['product']['image'] = api_asset($product->thumbnail_img);
                 $array_broduct['seller']['products'][$k]['cart_id'] = $cart->id;
                 $array_broduct['seller']['products'][$k]['delete'] = route('carts.destroy', $cart->id);
@@ -243,7 +236,7 @@ class CartController extends BaseController
     {
         $product = Product::find($request->id);
         if (!$product)
-            return $this->sendError('error', 'Not Found product Id');
+            return $this->sendError('Not Found product Id');
         $variant = null;
         $color = $request->color;
         if ($color != null)
@@ -251,6 +244,10 @@ class CartController extends BaseController
         $fabric = $request->fabric;
         if ($fabric != null) {
             $fab = DB::table('fabrics')->where('name_ar', $fabric)->Orwhere('name_en', $fabric)->first()->name_ar;
+        }
+         if($request->qty < $product->min_qty){
+                        return $this->sendError(translate('The minimum quantity is') .' '.$product->min_qty );
+
         }
         $size = $request->size;
         if ($color != null && $size != null && $fabric != null)
@@ -336,6 +333,10 @@ class CartController extends BaseController
         if ($cart) {
             if ($cart->variation == null) {
                 $product = Product::find($cart->product_id);
+                if($request->quantity < $product->min_qty){
+                      return $this->sendError(translate('The minimum quantity is') .' '.$product->min_qty );
+
+                }
                 if ($request->quantity <= $product->current_stock) {
                     $cart->update(['quantity' => $request->quantity]);
                     return $this->sendResponse('success', 'Cart updated');
@@ -502,20 +503,20 @@ class CartController extends BaseController
                     $seller->save();
                 }
             }
-            if ($request->payment_type == 'thawani') {
-                $thawani = new ThawaniController;
-                return $thawani->api_shipp($request, $order, $id, $id2);
-            }else{
-                if (auth('api')->check()) {
-                    $user = auth('api')->user();
-                    if ($user->balance >= $order->grand_total) {
-                        $user->balance -= $order->grand_total;
-                        $user->save();
-                        return $this->checkout_done($order->id, 'wallet', $id, $id2);
-                    }
+        }
+        if ($request->payment_type == 'thawani') {
+            $thawani = new ThawaniController;
+            return $thawani->api_shipp($request, $order, $id, $id2);
+        }else{
+            if (auth('api')->check()) {
+                $user = auth('api')->user();
+                if ($user->balance >= $order->grand_total) {
+                    $user->balance -= $order->grand_total;
+                    $user->save();
+                    return $this->checkout_done($order->id, 'wallet', $id, $id2);
                 }
-                return $this->sendError(translate('There is not enough balance'), translate('There is not enough balance'));
             }
+            return $this->sendError(translate('There is not enough balance'));
         }
     }
 

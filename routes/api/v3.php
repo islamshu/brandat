@@ -81,6 +81,10 @@ Route::prefix('v3')->namespace('Api\V3')->middleware(['changeLanguage','header_r
 });
 
 Route::prefix('v3')->namespace('Api\V3')->middleware(['is_login', 'changeLanguage','header_request_env'])->group(function () {
+    Route::get('follower','FollowerController@index');
+    Route::post('follower','FollowerController@store');
+    Route::get('product_for_following','FollowerController@product_vendor_follow');
+    Route::get('follower_seller_without_product','FollowerController@following_seller');
     Route::get('get_noification/{id}', 'GeneralSettingController@get_noification_single')->name('notfy_single');
     Route::get('notofication', 'GeneralSettingController@get_noification');
     Route::get('wallet/history', 'WalletController@walletRechargeHistory');

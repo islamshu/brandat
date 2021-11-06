@@ -125,7 +125,16 @@ class ProductController extends BaseController
 
     public function bestSeller()
     {
-        $best['data'] = ProductResource::collection(Product::orderBy('num_of_sale', 'desc')->limit(20)->get());
+        $best['data'] = Product::where('published', 1)->where(function ($qq){
+            $qq->where('added_by','admin')->orWhereHas('user', function ($query) {
+                $query->whereHas('seller', function ($q) {
+                    $q->where('verification_status',1);
+                });
+            });
+        })->orderBy('num_of_sale', 'desc')->limit(20)->get();
+        if ($best['data']) {
+            $best['data'] = ProductResource::collection($best['data']);
+        }
         return $this->sendResponse($best, translate('best seller'));
     }
 

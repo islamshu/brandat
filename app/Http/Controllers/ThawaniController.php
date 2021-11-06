@@ -367,9 +367,10 @@ class ThawaniController extends Controller
 
         $amount = $order->grand_total * 1000;
 
-        // dd(auth('api')->user());
+
         $order_id = rand(0, 99999);
         if (auth('api')->check()) {
+            //   dd('dd');
             $customer_name = auth('api')->user()->name;
             $customer_phone = auth('api')->user()->phone;
             $customer_email = auth('api')->user()->email;
@@ -523,10 +524,12 @@ class ThawaniController extends Controller
         $array['subject'] = translate('Your order has been placed') . ' - ' . $order->code;
         $array['from'] = env('MAIL_USERNAME');
         $array['order'] = $order;
-        $seller_id = $order->orderDetails->first()->seller_id;
+        $seller_id = @$order->orderDetails->first()->seller_id;
         $seller = User::find($seller_id);
-        $user_type = $seller->user_type;
-        if($user_type == 'admin'){
+        if($seller != null){
+        $user_type = @$seller->user_type;
+        }
+        if($user_type == 'admin' || $user_type == null || $seller == null){
             $shop = env('APP_NAME');
         }else{
             $shop=$seller->shop;
@@ -538,7 +541,7 @@ class ThawaniController extends Controller
                 Mail::to(json_decode($order->shipping_address)->email)->queue(new InvoiceEmailManager($array));
                 Mail::to($user->email)->queue(new InvoiceEmailManager($array));
             } catch (\Exception $e) {
-                return view('payment_order_success_en',compact('order','shop'));
+                return $e;
             }
         }
         if (App::getLocale() == 'en') {
