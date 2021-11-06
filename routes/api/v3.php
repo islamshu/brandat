@@ -78,6 +78,8 @@ Route::prefix('v3')->namespace('Api\V3')->middleware(['changeLanguage','header_r
     Route::post('retrun_to_paid/{id}/{id2}', 'CartController@make_order_id')->name('api.make_order');
     Route::post('carts/change-quantity', 'CartController@changeQuantity');
     Route::apiResource('carts', 'CartController')->only('destroy');
+    Route::get('users_count','FollowerController@users_count');
+    Route::get('seller_type/{item}','FollowerController@seller_type');
 });
 
 Route::prefix('v3')->namespace('Api\V3')->middleware(['is_login', 'changeLanguage','header_request_env'])->group(function () {
