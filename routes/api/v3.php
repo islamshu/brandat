@@ -50,7 +50,7 @@ Route::prefix('v3')->namespace('Api\V3')->middleware(['changeLanguage','header_r
     Route::get('shops/products/top/{id}', 'ShopController@topSellingProducts')->name('shops.topSellingProducts');
     Route::get('shops/products/featured/{id}', 'ShopController@featuredProducts')->name('shops.featuredProducts');
     Route::get('shops/products/new/{id}', 'ShopController@newProducts')->name('shops.newProducts');
-    Route::get('shops/brands/{id}', 'ShopController@brands')->name('shops.brands');
+    Route::get('shops/brands/{id}', 'ShopController@brands')->name('v3.shops.brands');
     Route::get('bestseller', 'ShopController@bestseller');
     Route::get('sellers', 'ShopController@seller');
     Route::apiResource('shops', 'ShopController')->only('index');
