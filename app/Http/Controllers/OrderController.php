@@ -25,13 +25,13 @@ use CoreComponentRepository;
 
 class OrderController extends Controller
 {
-     function __construct(){
-        $this->middleware('permission:sales', ['only' => ['index','store']]);
-        $this->middleware('permission:sales', ['only' => ['create','store']]);
-        $this->middleware('permission:sales', ['only' => ['edit','update']]);
-        $this->middleware('permission:sales', ['only' => ['destroy']]);
-        $this->middleware('permission:sales', ['only' => ['all_orders']]);
-        }
+    //  function __construct(){
+    //     $this->middleware('permission:sales', ['only' => ['index','store']]);
+    //     $this->middleware('permission:sales', ['only' => ['create','store']]);
+    //     $this->middleware('permission:sales', ['only' => ['edit','update']]);
+    //     $this->middleware('permission:sales', ['only' => ['destroy']]);
+    //     $this->middleware('permission:sales', ['only' => ['all_orders']]);
+    //     }
     /**
      * Display a listing of the resource to seller.
      *
