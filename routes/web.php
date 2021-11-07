@@ -61,7 +61,7 @@ Route::post('/home/section/featured', 'HomeController@load_featured_section')->n
 Route::post('/home/section/best_selling', 'HomeController@load_best_selling_section')->name('home.section.best_selling');
 Route::post('/home/section/home_categories', 'HomeController@load_home_categories_section')->name('home.section.home_categories');
 Route::post('/home/section/best_sellers', 'HomeController@load_best_sellers_section')->name('home.section.best_sellers');
-Route::get('/brandat', 'HomeController@brandat');
+Route::get('/branddat', 'HomeController@brandat');
 Route::get('/mshaher', 'HomeController@mshaher');
 //category dropdown menu ajax call
 Route::post('/category/nav-element-list', 'HomeController@get_category_items')->name('category.elements');
