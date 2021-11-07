@@ -46,10 +46,10 @@ Route::prefix('v3')->namespace('Api\V3')->middleware(['changeLanguage','header_r
     Route::get('reviews/product/{id}', 'ReviewController@index')->name('api.reviews.index');
     Route::post('shops/create', 'ShopController@create');
     Route::get('shops/details/{id}', 'ShopController@info')->name('shops.info');
-    Route::get('shops/products/all/{id}', 'ShopController@allProducts')->name('shops.allProducts');
-    Route::get('shops/products/top/{id}', 'ShopController@topSellingProducts')->name('shops.topSellingProducts');
-    Route::get('shops/products/featured/{id}', 'ShopController@featuredProducts')->name('shops.featuredProducts');
-    Route::get('shops/products/new/{id}', 'ShopController@newProducts')->name('shops.newProducts');
+    Route::get('shops/products/all/{id}', 'ShopController@allProducts')->name('v3.shops.allProducts');
+    Route::get('shops/products/top/{id}', 'ShopController@topSellingProducts')->name('v3.shops.topSellingProducts');
+    Route::get('shops/products/featured/{id}', 'ShopController@featuredProducts')->name('v3.shops.featuredProducts');
+    Route::get('shops/products/new/{id}', 'ShopController@newProducts')->name('v3.shops.newProducts');
     Route::get('shops/brands/{id}', 'ShopController@brands')->name('v3.shops.brands');
     Route::get('bestseller', 'ShopController@bestseller');
     Route::get('sellers', 'ShopController@seller');
