@@ -51,11 +51,11 @@ class SellerResource extends JsonResource
 
             // 'rating'=>
             'links' => [
-                'featured' => route('shops.featuredProducts', $this->user->shop->id),
-                'top' => route('shops.topSellingProducts',  $this->user->shop->id),
-                'new' => route('shops.newProducts', $this->user->shop->id),
-                'all' => route('shops.allProducts', $this->user->shop->id),
-                'brands' => route('shops.brands', $this->user->shop->id),
+                'featured' => route('v3.shops.featuredProducts', $this->user->shop->id),
+                'top' => route('v3.shops.topSellingProducts', $this->user->shop->id),
+                'new' => route('v3.shops.newProducts', $this->user->shop->id),
+                'all' => route('v3.shops.allProducts', $this->user->shop->id),
+                'brands' => route('v3.shops.brands',$this->user->shop->id),
             ]
         ];
     }
