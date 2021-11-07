@@ -12,6 +12,9 @@ use App\Models\V3\Session;
 use App\Http\Controllers\Api\BaseController as BaseController;
 use App\Models\V3\User;
 use App\Notifications\EmailVerificationNotification;
+use DB;
+
+use function Matrix\trace;
 
 class AuthController extends BaseController
 {
@@ -21,12 +24,16 @@ class AuthController extends BaseController
             return $this->sendError(translate('Email is already in use'));
         if (User::where('phone', $request->phone)->first())
             return $this->sendError(translate('Phone is already in use'));
+        $fcm_token = $request->header('X-Client-FCM-Token');
+        if ($fcm_token == null || $fcm_token == '') {
+            $fcm_token = $request->header('x-client-fcm-token');
+        }
         $user = new User([
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
             'password' => bcrypt($request->password),
-            'fcm_token' => $request->header('X-Client-FCM-Token')
+            'fcm_token' => $fcm_token
         ]);
         if (BusinessSetting::where('type', 'email_verification')->first()->value != 1)
             $user->email_verified_at = date('Y-m-d H:m:s');
@@ -45,13 +52,13 @@ class AuthController extends BaseController
     public function login(Request $request)
     {
         if (!(Auth::attempt(['email' => $request->email, 'password' => $request->password]) || Auth::attempt(['phone' => $request->email, 'password' => $request->password])))
-            return $this->sendError('error validation', translate('Confirm your phone number,or enter your phone number again'));
+            return $this->sendError(translate('Confirm your phone number,or enter your phone number again'),$request->header('lang'));
         $user = $request->user();
         $user->fcm_token = $request->header('X-Client-FCM-Token');
         $user->save();
         $is_verfy = BusinessSetting::where('type', 'email_verification')->first()->value;
         if ($is_verfy != 0)
-            return $this->sendError('error validation', translate('Please verify your account'));
+            return $this->sendError(translate('Please verify your account',$request->header('lang')));
         $tokenResult = $user->createToken('Personal Access Token');
         return $this->loginSuccess($tokenResult, $user);
     }
@@ -72,11 +79,21 @@ class AuthController extends BaseController
 
     public function logout(Request $request)
     {
-        $request->user()->fcm_token = null;
-        $request->user()->save();
-        $request->user()->token()->revoke();
-        return $this->sendResponse('success', translate('Successfully logged out'));
-    }
+
+        $user = auth('api')->user();
+        $user->fcm_token = null;
+        $user->save();
+       $accessToken= $user->token();
+        // ->revoke();
+        DB::table('oauth_refresh_tokens')
+        ->where('access_token_id', $accessToken->id)
+        ->update([
+            'revoked' => true
+        ]);
+
+        return $this->sendResponse('Success',translate('Successfully logged out'));
+    
+}
 
     public function socialLogin(Request $request)
     {

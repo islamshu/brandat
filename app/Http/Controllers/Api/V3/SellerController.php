@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V3;
 use App\Http\Resources\V3\ShopResource;
 use App\Http\Resources\V3\ProductResource;
 use App\Models\V3\Category;
+use App\Models\V3\ClubPoint;
 use App\Models\V3\Product;
 use App\Models\V3\Shop;
 use App\Models\V3\OrderDetail;
@@ -12,6 +13,7 @@ use App\Models\V3\BusinessSetting;
 use App\Models\V3\Vendorpackege;
 use App\Models\V3\Upload;
 use App\Models\V3\User;
+use App\Models\V3\Wallet;
 use DB;
 use App\Models\V3\Colorcard;
 use App\Models\V3\Review;
@@ -28,6 +30,7 @@ class SellerController extends BaseController
 {
     public function update_delivery_status(Request $request)
     {
+        $point = 0;
         $order = Order::findOrFail($request->order_id);
         $order->delivery_viewed = '0';
         $order->save();
@@ -204,7 +207,7 @@ class SellerController extends BaseController
             $item['id'] = $orderq->id;
             $item['code'] = $orderq->code;
             foreach (OrderDetail::where('order_id', $orderq->id)->get() as $key => $proo) {
-                $pro = Product::find($proo->product_id);
+                $pro = Product::withTrashed()->find($proo->product_id);
                 $item['products'][$key]['id'] = $pro->id;
                 $item['products'][$key]['product_name_ar'] = $pro->name_ar;
                 $item['products'][$key]['product_name_en'] = $pro->name;
@@ -213,6 +216,7 @@ class SellerController extends BaseController
                 $item['products'][$key]['total'] = $proo->quantity * $proo->price;
                 $item['products'][$key][' link'] = route('products.show', $proo->product_id);
                 $item['products'][$key]['product_details'] = new ProductResource($pro);
+                $item['products'][$key]['variation'] = $proo->variation;
             }
             $item['num product'] = OrderDetail::where('order_id', $orderq->id)->count();
             if ($orderq->user_id != null)
@@ -297,13 +301,14 @@ class SellerController extends BaseController
         $rev = [];
         foreach ($reviews as $key => $value) {
             $review = Review::find($value->id);
+            $product = product::find($review->product_id);
             $review->viewed = 1;
             $review->save();
             $item['id'] = $review->id;
-            $item['product_name_ar'] = product::find($review->product_id)->name_ar;
-            $item['product_name_en'] = product::find($review->product_id)->name;
+            $item['product_name_ar'] = @$product->name_ar;
+            $item['product_name_en'] = @$product->name;
             $item['rating'] = $review->rating;
-            $item['user_name'] = User::find($review->user_id)->name;
+            $item['user_name'] = @User::find($review->user_id)->name;
             $item['comment'] = $review->comment;
             if ($review->status == 1)
                 $item['status'] = 'Published';
@@ -371,12 +376,12 @@ class SellerController extends BaseController
             $item['products']['category'][$k]['category_name_en'] = $categoryd->name_en;
             $item['products']['category'][$k]['Product'] = count($categoryd->products->where('user_id', auth('api')->user()->id));
         }
+        $item['link'] = route('v3.shops.info', User::find($user_id)->shop->id);
         return $this->sendResponse($item, translate('data seller'));
     }
 
     public function store_edit(Request $request)
     {
-        
         $id = auth('api')->user()->shop->id;
         $shop = Shop::find($id);
         if ($request->has('name') || $request->has('meta_title') || $request->has('meta_description') || $request->has('address')) {
@@ -444,8 +449,8 @@ class SellerController extends BaseController
             $shop->sliders = $array1;
             $shop->save();
         }
-        $shops['data'] = new ShopResource(Shop::where('id', $shop->id)->get());
-        return $this->sendResponse($shops, translate('shop setting created sussfuly'));
+        $shops['data'] = ShopResource::collection(Shop::where('id', $shop->id)->get());
+        return $this->sendResponse($shops, translate('shop setting created sussfuly',$request->header('lang')));
     }
 
     public function bank_setting(Request $request)
