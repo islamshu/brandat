@@ -30,6 +30,7 @@ class ShopController extends BaseController
 
     public function bestseller()
     {
+        dd('d');
         $array = array();
         foreach (Seller::where('verification_status', 1)->get() as $key => $seller) {
             if ($seller->user != null && $seller->user->shop != null) {
