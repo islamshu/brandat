@@ -32,11 +32,11 @@ class ShopResource extends JsonResource
             'youtube' => $this->youtube,
             'instagram' => $this->instagram,
             'links' => [
-                'featured' => route('shops.featuredProducts', $this->id),
-                'top' => route('shops.topSellingProducts',  $this->id),
-                'new' => route('shops.newProducts', $this->id),
-                'all' => route('shops.allProducts', $this->id),
-                'brands' => route('shops.brands', $this->id)
+                'featured' => route('v3.shops.featuredProducts', $this->id),
+                'top' => route('v3.shops.topSellingProducts',  $this->id),
+                'new' => route('v3.shops.newProducts', $this->id),
+                'all' => route('v3.shops.allProducts', $this->id),
+                'brands' => route('v3.shops.brands', $this->id)
             ]
         ];
     }

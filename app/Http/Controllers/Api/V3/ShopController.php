@@ -73,7 +73,7 @@ class ShopController extends BaseController
            array_push($ids,$s['id']);
         }
        
-        $shop= ShopResource::collection(Seller::whereIn('id',$ids)->get());
+        $shop= SellerResource::collection(Seller::whereIn('id',$ids)->get());
         return $this->sendResponse($shop, translate('shops'));
     }
 
